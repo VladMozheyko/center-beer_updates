@@ -1,9 +1,6 @@
 package fr.mossaab.appupdater.exception;
 
-package fr.mossaab.appupdater.exception;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import fr.mossaab.appupdater.dto.ErrorInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -12,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -41,10 +39,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorInfo("INTERNAL_ERROR", ex.getMessage()));
     }
 
-    @Data
-    @AllArgsConstructor
-    static class ErrorInfo {
-        private String code;
-        private String message;
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ErrorInfo> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+        return ResponseEntity.badRequest().body(new ErrorInfo("CONSTRAINT_VIOLATION", ex.getMessage()));
     }
+
 }

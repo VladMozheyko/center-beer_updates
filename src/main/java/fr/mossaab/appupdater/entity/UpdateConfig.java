@@ -1,61 +1,56 @@
 package fr.mossaab.appupdater.entity;
 
+import fr.mossaab.appupdater.enums.Platform;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "update_config")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UpdateConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // iOS или ANDROID для разделения записей
-    @Column(name = "platform", nullable = false)
+    @Schema(description = "платформа iOS или ANDROID")
     @Enumerated(EnumType.STRING)
+    @Column(name = "platform", nullable = false)
     private Platform platform;
 
-    // Самая свежая версия (на нее рекомендуем обновиться)
+    @Schema(description = "Самая свежая версия (на нее рекомендуем обновиться)")
     @Column(name = "latest_version", nullable = false)
     private String latestVersion;
 
-    // Граница ниже которой обновление обязательно
+    @Schema(description = "Граница ниже которой обновление обязательно")
     @Column(name = "force_update_version", nullable = false)
     private String forceUpdateVersion;
 
-    // Ссылки на магазины (null для чужой платформы)
+    @Schema(description = "Ссылки на магазин GOOGLE PLAY (может быть пустой, если платформа не поддерживает)")
     @Column(name = "google_play_url")
     private String googlePlayUrl;
 
+    @Schema(description = "Ссылки на магазин RU STORE (может быть пустой, если платформа не поддерживает)")
     @Column(name = "rustore_url")
     private String ruStoreUrl;
 
+    @Schema(description = "Ссылки на магазин APP STORE (может быть пустой, если платформа не поддерживает)")
     @Column(name = "app_store_url")
     private String appStoreUrl;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Schema(description = "Дата создания")
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Schema(description = "Дата выхода обновления")
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-
-    public enum Platform {
-        ANDROID,
-        IOS
-    }
-
-    public UpdateConfig() {}
-
-    public UpdateConfig(Platform platform, String latestVersion, String forceUpdateVersion,
-                        String googlePlayUrl, String ruStoreUrl, String appStoreUrl) {
-        this.platform = platform;
-        this.latestVersion = latestVersion;
-        this.forceUpdateVersion = forceUpdateVersion;
-        this.googlePlayUrl = googlePlayUrl;
-        this.ruStoreUrl = ruStoreUrl;
-        this.appStoreUrl = appStoreUrl;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    // getters and setters...
 }
