@@ -21,6 +21,8 @@ public class ApiKeyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response,@NonNull Object handler) throws IOException {
         String apiKey = request.getHeader(HEADER);
         if (apiKey == null || !apiKey.equals(secretKey)) {
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("{\"error\": \"Unauthorized. Ключ API неверен или отсутствует.\"}");
             return false;
