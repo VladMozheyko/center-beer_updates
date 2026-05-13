@@ -34,6 +34,7 @@ class UpdateConfigControllerTest {
     @MockitoBean UpdateConfigService service;
     ObjectMapper objectMapper = new ObjectMapper();
 
+
     @Nested
     @DisplayName("POST /update-config/create")
     class CreateUpdateEndpoint {
@@ -86,6 +87,7 @@ class UpdateConfigControllerTest {
         }
     }
 
+
     @Nested
     @DisplayName("GET /update-config/get/{platform}")
     class GetUpdateConfigEndpoint {
@@ -102,8 +104,6 @@ class UpdateConfigControllerTest {
                             .updateType(UpdateType.OPTIONAL)
                             .message("Рекомендуем обновиться")
                             .build()));
-
-
 
             mockMvc.perform(get("/update-config/get/ANDROID?version=1.2.3"))
                     .andExpect(status().isOk())
